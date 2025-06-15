@@ -257,6 +257,6 @@ def startup():
     refresh_side_bar ()
 
 refresh_side_bar ()
-
+start_sys_info()
 
 main.mainloop()
