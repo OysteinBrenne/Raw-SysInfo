@@ -28,12 +28,51 @@ main_screen.grid(row=1,column=1,columnspan=4,sticky="nsew",)
 
 side_bar = ctk.CTkScrollableFrame(main,width=side_bar_frame_width,fg_color=font.fg_color_1,corner_radius=0,)
 side_bar.grid(row=1,column=0,columnspan=1,sticky="ns" ,padx=0, pady=0,)
+side_bar._scrollbar.grid_forget()
 
 
+
+
+#---------------------------------------------------------------
+#if it works it works
+sidebar_system_button = ctk.CTkButton(side_bar,)
+sidebar_system_button.pack(fill="x", anchor="w", )
+sidebar_cpu_button = ctk.CTkButton(side_bar)
+sidebar_cpu_button.pack(pady=side_bar_button_pady)
+sidebar_ram_button = ctk.CTkButton(side_bar)
+sidebar_ram_button.pack(pady=side_bar_button_pady)
+sidebar_storage_button = ctk.CTkButton(side_bar)
+sidebar_storage_button.pack(pady=side_bar_button_pady)
+sidebar_gpu_button = ctk.CTkButton(side_bar)
+sidebar_gpu_button.pack(pady=side_bar_button_pady)
+sidebar_motherboard_button = ctk.CTkButton(side_bar)
+sidebar_motherboard_button.pack(pady=side_bar_button_pady)
+sidebar_bios_button = ctk.CTkButton(side_bar,)
+sidebar_bios_button.pack(pady=side_bar_button_pady)
+sidebar_users_button = ctk.CTkButton(side_bar,)
+sidebar_users_button.pack(pady=side_bar_button_pady)
+sidebar_network_button = ctk.CTkButton(side_bar,)
+sidebar_network_button.pack(pady=side_bar_button_pady)
+sidebar_windows_button = ctk.CTkButton(side_bar,)
+sidebar_windows_button.pack(pady=side_bar_button_pady)
+sidebar_battery_button = ctk.CTkButton(side_bar)
+sidebar_battery_button.pack(pady=side_bar_button_pady)
+sidebar_startup_cmd_button = ctk.CTkButton(side_bar,)
+sidebar_startup_cmd_button.pack(pady=side_bar_button_pady)
+sidebar_audio_button = ctk.CTkButton(side_bar,)
+sidebar_audio_button.pack(pady=side_bar_button_pady)
+sidebar_displays_button = ctk.CTkButton(side_bar,)
+sidebar_displays_button.pack(pady=side_bar_button_pady)
+sidebar_input_button = ctk.CTkButton(side_bar,)
+sidebar_input_button.pack(pady=side_bar_button_pady)
+
+#------------------------------------------------------
 
 def clear_main_screen():
     for widget in main_screen.winfo_children():
         widget.destroy()
+    for widget in side_bar.winfo_children():
+        widget.configure(fg_color=font.fg_color_1)
 
 def start_sys_info():
     clear_main_screen()
@@ -41,6 +80,7 @@ def start_sys_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_ComputerSystem,"Win32_ComputerSystem"))
     info_label.configure(state="disabled")
+    sidebar_system_button.configure(fg_color=font.clicked_color_1)
 
 def start_disk_info():
     clear_main_screen()
@@ -48,6 +88,7 @@ def start_disk_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_DiskDrive,"Win32_DiskDrive"))
     info_label.configure(state="disabled")
+    sidebar_storage_button.configure(fg_color=font.clicked_color_1)
 
 
 def start_cpu_info():
@@ -56,6 +97,7 @@ def start_cpu_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_Processor,"Win32_Processor"))
     info_label.configure(state="disabled")
+    sidebar_cpu_button.configure(fg_color=font.clicked_color_1)
 
 def start_ram_info():
     clear_main_screen()
@@ -63,6 +105,7 @@ def start_ram_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_PhysicalMemory,"Win32_PhysicalMemory"))
     info_label.configure(state="disabled")
+    sidebar_ram_button.configure(fg_color=font.clicked_color_1)
 
 def start_gpu_info():
     clear_main_screen()
@@ -70,6 +113,7 @@ def start_gpu_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_VideoController,"Win32_VideoController"))
     info_label.configure(state="disabled")
+    sidebar_gpu_button.configure(fg_color=font.clicked_color_1)
 
 def start_mb_info():
     clear_main_screen()
@@ -77,6 +121,7 @@ def start_mb_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_BaseBoard,"Win32_BaseBoard"))
     info_label.configure(state="disabled")
+    sidebar_motherboard_button.configure(fg_color=font.clicked_color_1)
 
 def start_bios_info():
     clear_main_screen()
@@ -84,6 +129,7 @@ def start_bios_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_BIOS,"Win32_BIOS"))
     info_label.configure(state="disabled")
+    sidebar_bios_button.configure(fg_color=font.clicked_color_1)
 
 def start_users_info():
     clear_main_screen()
@@ -91,6 +137,7 @@ def start_users_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_UserAccount,"Win32_UserAccount"))
     info_label.configure(state="disabled")
+    sidebar_users_button.configure(fg_color=font.clicked_color_1)
 
 def start_net_info():
     clear_main_screen()
@@ -98,6 +145,7 @@ def start_net_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_NetworkAdapterConfiguration,"Win32_NetworkAdapterConfiguration"))
     info_label.configure(state="disabled")
+    sidebar_network_button.configure(fg_color=font.clicked_color_1)
 
 def start_audio_info():
     clear_main_screen()
@@ -105,6 +153,7 @@ def start_audio_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_SoundDevice,"Win32_SoundDevice"))
     info_label.configure(state="disabled")
+    sidebar_audio_button.configure(fg_color=font.clicked_color_1)
 
 def start_windows_info():
     clear_main_screen()
@@ -112,6 +161,7 @@ def start_windows_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_OperatingSystem,"Win32_OperatingSystem"))
     info_label.configure(state="disabled")
+    sidebar_windows_button.configure(fg_color=font.clicked_color_1)
 
 def start_battery_info():
     clear_main_screen()
@@ -119,6 +169,7 @@ def start_battery_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_Battery,"Win32_Battery"))
     info_label.configure(state="disabled")
+    sidebar_battery_button.configure(fg_color=font.clicked_color_1)
 
 def start_display_info():
     clear_main_screen()
@@ -126,6 +177,7 @@ def start_display_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_DesktopMonitor,"Win32_DesktopMonitor"))
     info_label.configure(state="disabled")
+    sidebar_displays_button.configure(fg_color=font.clicked_color_1)
 
 def start_input_info():
     clear_main_screen()
@@ -134,6 +186,7 @@ def start_input_info():
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_Keyboard,"Win32_Keyboard")+ "\n")
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_PointingDevice,"Win32_PointingDevice")+ "\n")
     info_label.configure(state="disabled")
+    sidebar_input_button.configure(fg_color=font.clicked_color_1)
 
 def start_startup_cmd_info():
     clear_main_screen()
@@ -141,61 +194,69 @@ def start_startup_cmd_info():
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_StartupCommand,"Win32_StartupCommand")+ "\n")
     info_label.configure(state="disabled")
+    sidebar_startup_cmd_button.configure(fg_color=font.clicked_color_1)
 
 
 
+def refresh_side_bar ():
+    global sidebar_system_button,sidebar_cpu_button,sidebar_ram_button
+    global sidebar_storage_button,sidebar_gpu_button,sidebar_motherboard_button,sidebar_bios_button
+    global sidebar_users_button,sidebar_network_button,sidebar_windows_button,sidebar_battery_button
+    global sidebar_startup_cmd_button,sidebar_audio_button,sidebar_displays_button,sidebar_input_button
 
-sidebar_system_button = ctk.CTkButton(side_bar,text="System",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_sys_info,border_width  = 0,)
-sidebar_system_button.pack(fill="x", anchor="w", )
+    for widget in side_bar.winfo_children():
+        widget.destroy()
+    sidebar_system_button = ctk.CTkButton(side_bar,text="System",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_sys_info,border_width  = 0,)
+    sidebar_system_button.pack(fill="x", anchor="w", )
 
-sidebar_cpu_button = ctk.CTkButton(side_bar,text="CPU",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_cpu_info)
-sidebar_cpu_button.pack(pady=side_bar_button_pady)
-sidebar_ram_button = ctk.CTkButton(side_bar,text="RAM",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_ram_info)
-sidebar_ram_button.pack(pady=side_bar_button_pady)
+    sidebar_cpu_button = ctk.CTkButton(side_bar,text="CPU",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_cpu_info)
+    sidebar_cpu_button.pack(pady=side_bar_button_pady)
 
-sidebar_storage_button = ctk.CTkButton(side_bar,text="Storage",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_disk_info)
-sidebar_storage_button.pack(pady=side_bar_button_pady)
+    sidebar_ram_button = ctk.CTkButton(side_bar,text="RAM",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_ram_info)
+    sidebar_ram_button.pack(pady=side_bar_button_pady)
 
-sidebar_gpu_button = ctk.CTkButton(side_bar,text="GPU",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_gpu_info)
-sidebar_gpu_button.pack(pady=side_bar_button_pady)
+    sidebar_storage_button = ctk.CTkButton(side_bar,text="Storage",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_disk_info)
+    sidebar_storage_button.pack(pady=side_bar_button_pady)
 
-sidebar_motherboard_button = ctk.CTkButton(side_bar,text="Motherboard",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_mb_info)
-sidebar_motherboard_button.pack(pady=side_bar_button_pady)
+    sidebar_gpu_button = ctk.CTkButton(side_bar,text="GPU",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_gpu_info)
+    sidebar_gpu_button.pack(pady=side_bar_button_pady)
 
+    sidebar_motherboard_button = ctk.CTkButton(side_bar,text="Motherboard",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_mb_info)
+    sidebar_motherboard_button.pack(pady=side_bar_button_pady)
 
+    sidebar_bios_button = ctk.CTkButton(side_bar,text="Bios",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_bios_info)
+    sidebar_bios_button.pack(pady=side_bar_button_pady)
 
-sidebar_bios_button = ctk.CTkButton(side_bar,text="Bios",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_bios_info)
-sidebar_bios_button.pack(pady=side_bar_button_pady)
+    sidebar_users_button = ctk.CTkButton(side_bar,text="Users",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_users_info)
+    sidebar_users_button.pack(pady=side_bar_button_pady)
 
-sidebar_users_button = ctk.CTkButton(side_bar,text="Users",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_users_info)
-sidebar_users_button.pack(pady=side_bar_button_pady)
+    sidebar_network_button = ctk.CTkButton(side_bar,text="Network",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_net_info)
+    sidebar_network_button.pack(pady=side_bar_button_pady)
 
-sidebar_network_button = ctk.CTkButton(side_bar,text="Network",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_net_info)
-sidebar_network_button.pack(pady=side_bar_button_pady)
+    sidebar_windows_button = ctk.CTkButton(side_bar,text="Windows",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_windows_info)
+    sidebar_windows_button.pack(pady=side_bar_button_pady)
 
+    sidebar_battery_button = ctk.CTkButton(side_bar,command=start_battery_info,text="Battery",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
+    sidebar_battery_button.pack(pady=side_bar_button_pady)
 
-sidebar_windows_button = ctk.CTkButton(side_bar,text="Windows",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_windows_info)
-sidebar_windows_button.pack(pady=side_bar_button_pady)
+    sidebar_startup_cmd_button = ctk.CTkButton(side_bar,command=start_startup_cmd_info,text="Startup cmd",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
+    sidebar_startup_cmd_button.pack(pady=side_bar_button_pady)
 
-sidebar_battery_button = ctk.CTkButton(side_bar,command=start_battery_info,text="Battery",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
-sidebar_battery_button.pack(pady=side_bar_button_pady)
+    sidebar_audio_button = ctk.CTkButton(side_bar,text="Audio",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_audio_info)
+    sidebar_audio_button.pack(pady=side_bar_button_pady)
 
-sidebar_startup_cmd_button = ctk.CTkButton(side_bar,command=start_startup_cmd_info,text="Startup cmd",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
-sidebar_startup_cmd_button.pack(pady=side_bar_button_pady)
+    sidebar_displays_button = ctk.CTkButton(side_bar,command=start_display_info,text="Displays",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
+    sidebar_displays_button.pack(pady=side_bar_button_pady)
 
-sidebar_audio_button = ctk.CTkButton(side_bar,text="Audio",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1,command=start_audio_info)
-sidebar_audio_button.pack(pady=side_bar_button_pady)
+    sidebar_input_button = ctk.CTkButton(side_bar,command=start_input_info,text="Input",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
+    sidebar_input_button.pack(pady=side_bar_button_pady)
+    
+def startup():
+    for widget in side_bar.winfo_children():
+        widget.destroy()
+    refresh_side_bar ()
 
-sidebar_displays_button = ctk.CTkButton(side_bar,command=start_display_info,text="Displays",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
-sidebar_displays_button.pack(pady=side_bar_button_pady)
+refresh_side_bar ()
 
-sidebar_input_button = ctk.CTkButton(side_bar,command=start_input_info,text="Input",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
-sidebar_input_button.pack(pady=side_bar_button_pady)
-
-
-
-
-
-start_sys_info()
 
 main.mainloop()
