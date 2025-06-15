@@ -1,4 +1,4 @@
-# CTK-Sysinfo
+# Raw-SysInfo
 
 # Simple gui program that displays raw system information using WMI
 ## works only on Windows
