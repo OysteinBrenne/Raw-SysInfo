@@ -251,10 +251,7 @@ def refresh_side_bar ():
     sidebar_input_button = ctk.CTkButton(side_bar,command=start_input_info,text="Input",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
     sidebar_input_button.pack(pady=side_bar_button_pady)
     
-def startup():
-    for widget in side_bar.winfo_children():
-        widget.destroy()
-    refresh_side_bar ()
+
 
 refresh_side_bar ()
 start_sys_info()
