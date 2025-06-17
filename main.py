@@ -2,19 +2,19 @@ import customtkinter as ctk
 import ctypes,wmi
 from modules import font as font
 from modules import wmi_info as wmii
-
+from modules import welcome
 
 c = wmi.WMI()
 ctypes.windll.shcore.SetProcessDpiAwareness(1)
 side_bar_width = 85
 side_bar_frame_width = 85
-side_bar_button_pady =2
+side_bar_button_pady = 2
 
 main = ctk.CTk()
 main.resizable(width=False,height=False)
 
 main.geometry("600x500")
-main.title("Raw SysInfo 0.2")
+main.title("Raw SysInfo 0.3")
 
 
 main.grid_columnconfigure(0, weight=0,minsize=side_bar_width,)  
@@ -23,7 +23,7 @@ main.grid_rowconfigure(1, weight=1)
 main.columnconfigure(2, weight=1)
 main.columnconfigure(1, weight=1)
 
-main_screen = ctk.CTkFrame(main,fg_color="#473C3C",corner_radius=0)
+main_screen = ctk.CTkFrame(main,corner_radius=0)
 main_screen.grid(row=1,column=1,columnspan=4,sticky="nsew",)
 
 side_bar = ctk.CTkScrollableFrame(main,width=side_bar_frame_width,fg_color=font.fg_color_1,corner_radius=0,)
@@ -68,11 +68,21 @@ sidebar_input_button.pack(pady=side_bar_button_pady)
 
 #------------------------------------------------------
 
+
 def clear_main_screen():
     for widget in main_screen.winfo_children():
         widget.destroy()
     for widget in side_bar.winfo_children():
         widget.configure(fg_color=font.fg_color_1)
+
+
+                  
+def start_welcome_info():
+    clear_main_screen()
+    info_label = ctk.CTkTextbox(main_screen,font=font.font_2,corner_radius=0,fg_color=font.fg_color_2)
+    info_label.pack(fill="both",expand=True)
+    info_label.insert("0.0",f"{welcome.welcome_text}")
+    info_label.configure(state="disabled")
 
 def start_sys_info():
     clear_main_screen()
@@ -89,7 +99,6 @@ def start_disk_info():
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_DiskDrive,"Win32_DiskDrive"))
     info_label.configure(state="disabled")
     sidebar_storage_button.configure(fg_color=font.clicked_color_1)
-
 
 def start_cpu_info():
     clear_main_screen()
@@ -254,6 +263,7 @@ def refresh_side_bar ():
 
 
 refresh_side_bar ()
-start_sys_info()
+
+start_welcome_info()
 
 main.mainloop()
