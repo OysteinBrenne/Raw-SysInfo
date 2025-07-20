@@ -1,11 +1,12 @@
 import customtkinter as ctk
-import ctypes,wmi
+import ctypes,wmi,threading,pythoncom
 from modules import font as font
 from modules import wmi_info as wmii
 from modules import welcome
 
 c = wmi.WMI()
 ctypes.windll.shcore.SetProcessDpiAwareness(1)
+
 side_bar_width = 85
 side_bar_frame_width = 85
 side_bar_button_pady = 2
@@ -15,7 +16,6 @@ main.resizable(width=False,height=False)
 
 main.geometry("600x500")
 main.title("Raw SysInfo 0.3")
-
 
 main.grid_columnconfigure(0, weight=0,minsize=side_bar_width,)  
 main.grid_columnconfigure(1, weight=1)  
@@ -30,44 +30,8 @@ side_bar = ctk.CTkScrollableFrame(main,width=side_bar_frame_width,fg_color=font.
 side_bar.grid(row=1,column=0,columnspan=1,sticky="ns" ,padx=0, pady=0,)
 side_bar._scrollbar.grid_forget()
 
-
-
-
-#---------------------------------------------------------------
-#if it works it works
-sidebar_system_button = ctk.CTkButton(side_bar,)
-sidebar_system_button.pack(fill="x", anchor="w", )
-sidebar_cpu_button = ctk.CTkButton(side_bar)
-sidebar_cpu_button.pack(pady=side_bar_button_pady)
-sidebar_ram_button = ctk.CTkButton(side_bar)
-sidebar_ram_button.pack(pady=side_bar_button_pady)
-sidebar_storage_button = ctk.CTkButton(side_bar)
-sidebar_storage_button.pack(pady=side_bar_button_pady)
-sidebar_gpu_button = ctk.CTkButton(side_bar)
-sidebar_gpu_button.pack(pady=side_bar_button_pady)
-sidebar_motherboard_button = ctk.CTkButton(side_bar)
-sidebar_motherboard_button.pack(pady=side_bar_button_pady)
-sidebar_bios_button = ctk.CTkButton(side_bar,)
-sidebar_bios_button.pack(pady=side_bar_button_pady)
-sidebar_users_button = ctk.CTkButton(side_bar,)
-sidebar_users_button.pack(pady=side_bar_button_pady)
-sidebar_network_button = ctk.CTkButton(side_bar,)
-sidebar_network_button.pack(pady=side_bar_button_pady)
-sidebar_windows_button = ctk.CTkButton(side_bar,)
-sidebar_windows_button.pack(pady=side_bar_button_pady)
-sidebar_battery_button = ctk.CTkButton(side_bar)
-sidebar_battery_button.pack(pady=side_bar_button_pady)
-sidebar_startup_cmd_button = ctk.CTkButton(side_bar,)
-sidebar_startup_cmd_button.pack(pady=side_bar_button_pady)
-sidebar_audio_button = ctk.CTkButton(side_bar,)
-sidebar_audio_button.pack(pady=side_bar_button_pady)
-sidebar_displays_button = ctk.CTkButton(side_bar,)
-sidebar_displays_button.pack(pady=side_bar_button_pady)
-sidebar_input_button = ctk.CTkButton(side_bar,)
-sidebar_input_button.pack(pady=side_bar_button_pady)
-
-#------------------------------------------------------
-
+cpu_lock = threading.Lock()
+net_lock = threading.Lock()
 
 def clear_main_screen():
     for widget in main_screen.winfo_children():
@@ -101,109 +65,138 @@ def start_disk_info():
     sidebar_storage_button.configure(fg_color=font.clicked_color_1)
 
 def start_cpu_info():
+    global cpu_lock
+    if cpu_lock.locked():
+        return
+    
     clear_main_screen()
-    info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
-    info_label.pack(fill="both",expand=True)
-    info_label.insert("0.0",wmii.get_wmi_info(c.Win32_Processor,"Win32_Processor"))
-    info_label.configure(state="disabled")
-    sidebar_cpu_button.configure(fg_color=font.clicked_color_1)
+
+    def cpu_start():
+        with cpu_lock:    
+            pythoncom.CoInitialize()
+            cpu_wmi = wmi.WMI()
+            sidebar_cpu_button.configure(fg_color=font.clicked_color_1)
+            info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
+            info_label.pack(fill="both",expand=True)
+            info_label.insert("0.0","Loading...")
+            info_label.insert("0.0",wmii.get_wmi_info(cpu_wmi.Win32_Processor,"Win32_Processor"))
+            info_label.configure(state="disabled")
+    threading.Thread(target=cpu_start,daemon=True).start()
+        
 
 def start_ram_info():
     clear_main_screen()
+    sidebar_ram_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_PhysicalMemory,"Win32_PhysicalMemory"))
     info_label.configure(state="disabled")
-    sidebar_ram_button.configure(fg_color=font.clicked_color_1)
 
 def start_gpu_info():
     clear_main_screen()
+    sidebar_gpu_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_VideoController,"Win32_VideoController"))
     info_label.configure(state="disabled")
-    sidebar_gpu_button.configure(fg_color=font.clicked_color_1)
 
 def start_mb_info():
     clear_main_screen()
+    sidebar_motherboard_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_BaseBoard,"Win32_BaseBoard"))
     info_label.configure(state="disabled")
-    sidebar_motherboard_button.configure(fg_color=font.clicked_color_1)
 
 def start_bios_info():
     clear_main_screen()
+    sidebar_bios_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_BIOS,"Win32_BIOS"))
     info_label.configure(state="disabled")
-    sidebar_bios_button.configure(fg_color=font.clicked_color_1)
 
 def start_users_info():
     clear_main_screen()
+    sidebar_users_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_UserAccount,"Win32_UserAccount"))
     info_label.configure(state="disabled")
-    sidebar_users_button.configure(fg_color=font.clicked_color_1)
+    
 
 def start_net_info():
+    global net_lock
+    if net_lock.locked():
+        print ("already running")
+        return
     clear_main_screen()
-    info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
-    info_label.pack(fill="both",expand=True)
-    info_label.insert("0.0",wmii.get_wmi_info(c.Win32_NetworkAdapterConfiguration,"Win32_NetworkAdapterConfiguration"))
-    info_label.configure(state="disabled")
-    sidebar_network_button.configure(fg_color=font.clicked_color_1)
+    def net_start():
+        with net_lock:
+            pythoncom.CoInitialize()
+            net_wmi =wmi.WMI()
+            sidebar_network_button.configure(fg_color=font.clicked_color_1)
+            info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
+            info_label.pack(fill="both",expand=True)
+            info_label.insert("0.0","Loading...")
+            info_label.insert("0.0",wmii.get_wmi_info(net_wmi.Win32_NetworkAdapterConfiguration,"Win32_NetworkAdapterConfiguration"))
+            info_label.configure(state="disabled")
+    threading.Thread(target=net_start,daemon=True).start()
+    
 
 def start_audio_info():
     clear_main_screen()
+    sidebar_audio_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_SoundDevice,"Win32_SoundDevice"))
     info_label.configure(state="disabled")
-    sidebar_audio_button.configure(fg_color=font.clicked_color_1)
+    
 
 def start_windows_info():
     clear_main_screen()
+    sidebar_windows_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_OperatingSystem,"Win32_OperatingSystem"))
     info_label.configure(state="disabled")
-    sidebar_windows_button.configure(fg_color=font.clicked_color_1)
+    
 
 def start_battery_info():
     clear_main_screen()
+    sidebar_battery_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_Battery,"Win32_Battery"))
     info_label.configure(state="disabled")
-    sidebar_battery_button.configure(fg_color=font.clicked_color_1)
+    
 
 def start_display_info():
     clear_main_screen()
+    sidebar_displays_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_DesktopMonitor,"Win32_DesktopMonitor"))
     info_label.configure(state="disabled")
-    sidebar_displays_button.configure(fg_color=font.clicked_color_1)
+    
 
 def start_input_info():
     clear_main_screen()
+    sidebar_input_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_Keyboard,"Win32_Keyboard")+ "\n")
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_PointingDevice,"Win32_PointingDevice")+ "\n")
     info_label.configure(state="disabled")
-    sidebar_input_button.configure(fg_color=font.clicked_color_1)
+    
 
 def start_startup_cmd_info():
     clear_main_screen()
+    sidebar_startup_cmd_button.configure(fg_color=font.clicked_color_1)
     info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
     info_label.pack(fill="both",expand=True)
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_StartupCommand,"Win32_StartupCommand")+ "\n")
     info_label.configure(state="disabled")
-    sidebar_startup_cmd_button.configure(fg_color=font.clicked_color_1)
 
 
 
