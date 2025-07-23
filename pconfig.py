@@ -54,7 +54,8 @@ elif cli_arg == "input":
 
 
 elif cli_arg == "help":
-    print("available commands")
+    print("Raw Sysinfo 0.8")
+    print("github.com/OysteinBrenne/Raw-SysInfo")
     print("--------------------------------------")
 
     print("sys")
