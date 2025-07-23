@@ -52,12 +52,18 @@ elif cli_arg == "input":
     print(wmii.get_wmi_info(c.Win32_Keyboard,"Win32_Keyboard"))
     print(wmii.get_wmi_info(c.Win32_PointingDevice,"Win32_PointingDevice"))
 
+elif cli_arg == "custom":
+    arg_custom = str(sys.argv[2])
+    try:
+        print(wmii.get_wmi_info(getattr(c, arg_custom), arg_custom))
+    except Exception as error:
+        print("invalid command " + str(error))
+
 
 elif cli_arg == "help":
     print("Raw Sysinfo 0.8")
     print("github.com/OysteinBrenne/Raw-SysInfo")
     print("--------------------------------------")
-
     print("sys")
     print("cpu")
     print("ram")
@@ -73,7 +79,7 @@ elif cli_arg == "help":
     print("audio")
     print("display")
     print("input")
-
+    print("`custom` must include a second argument ie pconfig custom Win32_Keyboard")
 
 
 else: 

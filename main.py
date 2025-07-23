@@ -14,7 +14,7 @@ side_bar_button_pady = 2
 main = ctk.CTk()
 main.resizable(width=False,height=False)
 
-main.geometry("600x500")
+main.geometry("600x520")
 main.title("Raw SysInfo 0.8")
 
 main.grid_columnconfigure(0, weight=0,minsize=side_bar_width,)  
@@ -216,10 +216,32 @@ def start_startup_cmd_info():
     info_label.insert("0.0",wmii.get_wmi_info(c.Win32_StartupCommand,"Win32_StartupCommand")+ "\n")
     info_label.configure(state="disabled")
 
+def custom_wmi_info():
+    clear_main_screen()
+    sidebar_custom_button.configure(fg_color=font.clicked_color_1)
+    def get_custom_wmi_info():
+        try:
+            get_entery = entery_input_wmi.get().strip()
+            print ("0.0",wmii.get_wmi_info(getattr(c, get_entery), get_entery))
+            clear_main_screen()
+            info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
+            info_label.pack(fill="both",expand=True)
+            info_label.insert("0.0",wmii.get_wmi_info(getattr(c, get_entery), get_entery))
+            info_label.configure(state="disabled")
+        except Exception as error:
+            error_input_wmi.configure(text="ERROR: " +str(error))
+    
+    entery_input_wmi = ctk.CTkEntry(main_screen,placeholder_text="input custom wmi")
+    button_input_wmi = ctk.CTkButton(main_screen,text="Enter",command=get_custom_wmi_info)
+    error_input_wmi =ctk.CTkLabel(main_screen,text="",wraplength=480)
+    entery_input_wmi.pack(pady=6)
+    button_input_wmi.pack()
+    error_input_wmi.pack()
 
 
+            
 def refresh_side_bar ():
-    global sidebar_system_button,sidebar_cpu_button,sidebar_ram_button
+    global sidebar_system_button,sidebar_cpu_button,sidebar_ram_button,sidebar_custom_button
     global sidebar_storage_button,sidebar_gpu_button,sidebar_motherboard_button,sidebar_bios_button
     global sidebar_users_button,sidebar_network_button,sidebar_windows_button,sidebar_battery_button
     global sidebar_startup_cmd_button,sidebar_audio_button,sidebar_displays_button,sidebar_input_button
@@ -270,7 +292,10 @@ def refresh_side_bar ():
 
     sidebar_input_button = ctk.CTkButton(side_bar,command=start_input_info,text="Input",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
     sidebar_input_button.pack(pady=side_bar_button_pady)
-    
+
+    sidebar_custom_button = ctk.CTkButton(side_bar,command=custom_wmi_info,text="Custom",fg_color=font.fg_color_1,font=font.font_1, corner_radius=font.corner_radius_1,width=side_bar_width,hover_color=font.hover_color_1)
+    sidebar_custom_button.pack(pady=side_bar_button_pady)
+
 
 
 refresh_side_bar ()
