@@ -15,7 +15,7 @@ main = ctk.CTk()
 main.resizable(width=False,height=False)
 
 main.geometry("600x500")
-main.title("Raw SysInfo 0.6")
+main.title("Raw SysInfo 0.7")
 
 main.grid_columnconfigure(0, weight=0,minsize=side_bar_width,)  
 main.grid_columnconfigure(1, weight=1)  
@@ -70,17 +70,26 @@ def start_cpu_info():
         return
     
     clear_main_screen()
+    sidebar_cpu_button.configure(fg_color=font.clicked_color_1)
+    info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
+    info_label.pack(fill="both",expand=True)
+    info_label.insert("0.0","Loading...")
 
     def cpu_start():
         with cpu_lock:    
             pythoncom.CoInitialize()
             cpu_wmi = wmi.WMI()
-            sidebar_cpu_button.configure(fg_color=font.clicked_color_1)
-            info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
-            info_label.pack(fill="both",expand=True)
-            info_label.insert("0.0","Loading...")
-            info_label.insert("0.0",wmii.get_wmi_info(cpu_wmi.Win32_Processor,"Win32_Processor"))
-            info_label.configure(state="disabled")
+            data = wmii.get_wmi_info(cpu_wmi.Win32_Processor,"Win32_Processor")
+
+            def update_gui ():
+                try: 
+                    if str(info_label) in main.tk.call("winfo","children",str(main_screen)):
+                        info_label.insert("0.0",data)
+                        info_label.configure(state="disabled")
+                except Exception:
+                    pass
+            main.after(0, update_gui)
+        
     threading.Thread(target=cpu_start,daemon=True).start()
         
 
@@ -128,19 +137,28 @@ def start_users_info():
 def start_net_info():
     global net_lock
     if net_lock.locked():
-        print ("already running")
         return
     clear_main_screen()
+    sidebar_network_button.configure(fg_color=font.clicked_color_1)
+    info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
+    info_label.pack(fill="both",expand=True)
+    info_label.insert("0.0","Loading...")
+
+
     def net_start():
         with net_lock:
             pythoncom.CoInitialize()
             net_wmi =wmi.WMI()
-            sidebar_network_button.configure(fg_color=font.clicked_color_1)
-            info_label = ctk.CTkTextbox(main_screen,font=font.font_2,fg_color=font.fg_color_2,corner_radius=0)
-            info_label.pack(fill="both",expand=True)
-            info_label.insert("0.0","Loading...")
-            info_label.insert("0.0",wmii.get_wmi_info(net_wmi.Win32_NetworkAdapterConfiguration,"Win32_NetworkAdapterConfiguration"))
-            info_label.configure(state="disabled")
+            data = wmii.get_wmi_info(net_wmi.Win32_NetworkAdapterConfiguration,"Win32_NetworkAdapterConfiguration")
+            def update_net_gui ():
+                try: 
+                    if str(info_label) in main.tk.call("winfo","children",str(main_screen)):
+                        info_label.insert("0.0",data)
+                        info_label.configure(state="disabled")
+                except Exception:
+                    pass
+            
+            main.after(0,update_net_gui)
     threading.Thread(target=net_start,daemon=True).start()
     
 
