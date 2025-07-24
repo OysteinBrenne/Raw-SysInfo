@@ -61,7 +61,7 @@ elif cli_arg == "custom":
 
 
 elif cli_arg == "help":
-    print("Raw Sysinfo 0.8")
+    print("Raw Sysinfo 0.9")
     print("github.com/OysteinBrenne/Raw-SysInfo")
     print("--------------------------------------")
     print("sys")

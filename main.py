@@ -15,7 +15,7 @@ main = ctk.CTk()
 main.resizable(width=False,height=False)
 
 main.geometry("600x520")
-main.title("Raw SysInfo 0.8")
+main.title("Raw SysInfo 0.9")
 
 main.grid_columnconfigure(0, weight=0,minsize=side_bar_width,)  
 main.grid_columnconfigure(1, weight=1)  
